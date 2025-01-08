@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f8fafc;
+  --surface: #e2e8f0;
+  --surface-lighter: #0f172a11;
+  --positive: #84cc16;
+  --foreground: #020617;
+
+  @media (prefers-color-scheme: dark) {
+    --background: #020617;
+    --surface: #0f172a;
+    --surface-lighter: #f1f5f911;
+    --positive: #14532d;
+    --foreground: #f8fafc;
+  }
+}
