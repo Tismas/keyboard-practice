@@ -1,13 +1,19 @@
 // prettier-ignore
-export const lowerCaseLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'] as const
+export const lowerCaseHomeRow = ['a','s','d','f','g','h','j','k','l']
 // prettier-ignore
-export const upperCaseLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] as const
+export const lowerCaseBottomRow = ['z','x','c','v','b','n','m']
 // prettier-ignore
-export const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] as const
+export const lowerCaseTopRow = ['q','w','e','r','t','y','u','i','o','p']
 // prettier-ignore
-export const symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', ']', '{', '}', '\\', ',', ';', ':', '\'', '"', '.', '/', '<', '>', '?'] as const
+export const lowerCaseLetters = [...lowerCaseBottomRow, ...lowerCaseHomeRow, ...lowerCaseTopRow] as const
 // prettier-ignore
-export const whiteSpace = [' ', '\t', '\n', "\b"] as const
+export const upperCaseLetters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'] as const
+// prettier-ignore
+export const numbers = ['0','1','2','3','4','5','6','7','8','9'] as const
+// prettier-ignore
+export const symbols = ['`','~','!','@','#','$','%','^','&','*','(',')','-','_','=','+','[',']','{','}','\\',',',';',':','\'','"','.','/','<','>','?'] as const
+// prettier-ignore
+export const whiteSpace = [' ','\t','\n',"\b"] as const
 
 export type LowerCaseLetters = (typeof lowerCaseLetters)[number];
 export type UpperCaseLetters = (typeof upperCaseLetters)[number];

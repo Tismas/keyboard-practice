@@ -15,7 +15,7 @@ export const Config = observer(() => {
 
   return (
     <>
-      <h1 className="text-3xl mb-4">Config</h1>
+      <h1 className="text-3xl mb-4 mt-4">Config</h1>
       <Slider
         className="mb-6"
         label="Target speed"

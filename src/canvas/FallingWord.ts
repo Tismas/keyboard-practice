@@ -1,4 +1,5 @@
 import { KeyboardCharacter } from "../constants/characters";
+import { configStore } from "../stores/configStore";
 import { fontSize, gameStore } from "../stores/gameStore";
 import { Vector2 } from "../utils/Vector2";
 
@@ -76,7 +77,7 @@ export class FallingWord {
     const estimatedTime = timePerCharacter * this.word.length;
     const timeRatio = deltaTime / estimatedTime;
 
-    let dx = Math.min(5, toTravel * timeRatio * this.speed);
+    let dx = Math.min(3, toTravel * timeRatio * this.speed);
     if (this.punishedAt) {
       dx *= 2;
     }
@@ -84,6 +85,8 @@ export class FallingWord {
 
     if (this.position.y > ctx.canvas.height + 40) {
       this.markToRemove();
+      gameStore.lowerDifficulty(true);
+      gameStore.punishForMissedWord();
     }
     if (Number(new Date()) - Number(this.punishedAt) > punishTime) {
       this.punishedAt = null;
@@ -102,12 +105,26 @@ export class FallingWord {
     }
   }
 
+  calculateScore(completionSpeed: number) {
+    return (
+      Math.log(gameStore.currentSpeed * this.word.length * completionSpeed) *
+      configStore.unlockedCharacters.length
+    );
+  }
+
+  handleCompletion() {
+    this.markToRemove();
+    const completionSpeed = 1 - this.position.y / window.innerHeight;
+    gameStore.addScore(this.calculateScore(completionSpeed));
+    gameStore.upDifficulty(completionSpeed > 0.5);
+  }
+
   handleKey(key: KeyboardCharacter) {
     if (this.textToType.startsWith(key)) {
       this.typedText += key;
       this.textToType = this.textToType.slice(1);
       if (this.textToType.length === 0) {
-        this.markToRemove();
+        this.handleCompletion();
       }
     } else {
       gameStore.punishForInvalidButtonPress();

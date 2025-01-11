@@ -4,6 +4,7 @@ import { randomChoice } from "../utils/array";
 import { configStore } from "./configStore";
 import { draw, update } from "../canvas/game";
 import { KeyboardCharacter } from "../constants/characters";
+import { statsStore } from "./statsStore";
 
 export const fontSize = 20;
 
@@ -14,6 +15,8 @@ class GameStore {
   fallingWords: FallingWord[] = [];
   focusedWord: FallingWord | undefined = undefined;
   lastAddedWordAt = new Date();
+  currentSpeed = configStore.targetSpeed / 2;
+  score = 0;
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
@@ -47,10 +50,33 @@ class GameStore {
 
   punishForInvalidButtonPress() {
     this.fallingWords.forEach((word) => word.handlePunishment());
+    this.lowerDifficulty();
+    this.score = Math.max(0, this.score - 10);
+  }
+  punishForMissedWord() {
+    this.score *= 0.9;
+  }
+
+  addScore(amount: number) {
+    this.score += amount;
+    if (this.score > statsStore.topScore) {
+      statsStore.setTopScore(this.score);
+    }
   }
 
   clearFocusedWord() {
     this.focusedWord = undefined;
+  }
+
+  lowerDifficulty(double = false) {
+    this.currentSpeed = Math.max(10, this.currentSpeed - (double ? 2 : 1));
+  }
+  upDifficulty(double = false) {
+    this.currentSpeed += double ? 2 : 1;
+    if (this.currentSpeed >= configStore.targetSpeed) {
+      this.currentSpeed /= 2;
+      configStore.unlockNextCharacter();
+    }
   }
 
   private initializeEvents() {

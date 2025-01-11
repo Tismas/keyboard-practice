@@ -1,4 +1,3 @@
-import { configStore } from "../stores/configStore";
 import { gameStore } from "../stores/gameStore";
 
 let lastUpdate = new Date();
@@ -23,7 +22,7 @@ export const update = (ctx: CanvasRenderingContext2D) => {
   const deltaTime = Number(now) - Number(lastUpdate);
   lastUpdate = new Date();
   const wordDeltaTime = Number(now) - Number(gameStore.lastAddedWordAt);
-  const timePerCharacter = 60_000 / configStore.targetSpeed;
+  const timePerCharacter = 60_000 / gameStore.currentSpeed;
 
   gameStore.fallingWords.forEach((word) =>
     word.update(ctx, deltaTime, timePerCharacter)
