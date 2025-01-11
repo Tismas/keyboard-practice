@@ -28,12 +28,14 @@ export const Character = ({ character }: Props) => {
   const unlocked = useConfigStore((state) =>
     state.unlockedCharacters.includes(character)
   );
+  const toggleUnlocked = useConfigStore((state) => state.toggleUnlocked);
 
   return (
     <button
       className={`w-8 h-8 text-lg flex justify-center items-center rounded-md ${
         unlocked ? "bg-positive" : "bg-surfaceLighter opacity-50"
       }`}
+      onClick={() => toggleUnlocked(character)}
     >
       {isIconCharacter(character) ? iconCharacters[character] : character}
     </button>

@@ -1,9 +1,11 @@
+import { ReactNode } from "react";
+
 interface Props {
   min: number;
   max: number;
   value: number;
   label: string;
-  valueLabel?: string;
+  valueLabel?: ReactNode;
   className?: string;
   onChange: (newValue: number) => void;
 }
@@ -28,9 +30,7 @@ export const Slider = ({
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
       />
-      <span>
-        {value} {valueLabel}
-      </span>
+      <span>{valueLabel}</span>
     </span>
   );
 };

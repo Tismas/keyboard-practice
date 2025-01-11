@@ -5,7 +5,7 @@ export const upperCaseLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J
 // prettier-ignore
 export const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] as const
 // prettier-ignore
-export const symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', ']', '{', '}', '\\', ',', ';', ':', '\'', '"', ',', '.', '/', '<', '>', '?'] as const
+export const symbols = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', ']', '{', '}', '\\', ',', ';', ':', '\'', '"', '.', '/', '<', '>', '?'] as const
 // prettier-ignore
 export const whiteSpace = [' ', '\t', '\n', "\b"] as const
 

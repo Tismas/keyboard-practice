@@ -20,9 +20,14 @@ export const Config = () => {
         className="mb-6"
         label="Target speed"
         min={1}
-        max={180}
+        max={1000}
         value={targetSpeed}
-        valueLabel="characters per minute"
+        valueLabel={
+          <>
+            <div>{targetSpeed} characters per minute</div>
+            <div>(~{(targetSpeed / 6).toFixed(0)} words per minute)</div>
+          </>
+        }
         onChange={setTargetSpeed}
       />
       <div className="mb-4 flex flex-wrap gap-1">
