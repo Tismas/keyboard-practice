@@ -110,7 +110,7 @@ class GameStore {
   }
 
   private handleKeyDown(e: KeyboardEvent) {
-    if (["Shift", "Alt", "Control"].includes(e.key)) return;
+    if (["Shift", "Alt", "Control"].includes(e.key) || e.repeat) return;
 
     this.focusedWord ||= this.fallingWords
       .toSorted((a, b) => b.position.y - a.position.y)
