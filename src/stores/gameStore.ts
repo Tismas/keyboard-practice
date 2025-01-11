@@ -6,7 +6,7 @@ import { draw, update } from "../canvas/game";
 import { KeyboardCharacter } from "../constants/characters";
 import { statsStore } from "./statsStore";
 
-export const fontSize = 20;
+export const fontSize = 24;
 
 class GameStore {
   started = false;
