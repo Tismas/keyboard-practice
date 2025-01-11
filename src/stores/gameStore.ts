@@ -16,7 +16,6 @@ class GameStore {
   focusedWord: FallingWord | undefined = undefined;
   lastAddedWordAt = new Date();
   currentSpeed = configStore.targetSpeed / 2;
-  score = 0;
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
@@ -49,6 +48,7 @@ class GameStore {
   }
 
   punishForInvalidButtonPress() {
+    statsStore.setStreakWithoutMistake(0);
     if (this.focusedWord) {
       this.focusedWord.highlight();
     } else {
@@ -56,11 +56,12 @@ class GameStore {
     }
     this.fallingWords.forEach((word) => word.handlePunishment());
     this.lowerDifficulty(1);
-    this.score = Math.max(0, this.score - 10);
+    statsStore.setScore(statsStore.score - 10);
   }
   punishForMissedWord() {
+    statsStore.setStreakWithoutMistake(0);
     gameStore.lowerDifficulty(2);
-    this.score *= 0.9;
+    statsStore.setScore(statsStore.score * 0.9);
   }
 
   calculateScore(completionSpeed: number, wordLength: number) {
@@ -70,17 +71,12 @@ class GameStore {
     );
   }
   rewardCompletion(completionSpeed: number, wordLength: number) {
-    this.addScore(this.calculateScore(completionSpeed, wordLength));
+    statsStore.setScore(
+      statsStore.score + this.calculateScore(completionSpeed, wordLength)
+    );
     this.upDifficulty(
       Math.ceil(wordLength / 2) * (completionSpeed > 0.5 ? 2 : 1)
     );
-  }
-
-  addScore(amount: number) {
-    this.score += amount;
-    if (this.score > statsStore.topScore) {
-      statsStore.setTopScore(this.score);
-    }
   }
 
   clearFocusedWord() {
@@ -117,6 +113,7 @@ class GameStore {
     this.focusedWord ||= this.fallingWords
       .toSorted((a, b) => b.position.y - a.position.y)
       .find((word) => word.textToType.startsWith(e.key));
+    statsStore.setStreakWithoutMistake(statsStore.streakWithoutMistake + 1);
 
     if (!this.focusedWord) {
       this.punishForInvalidButtonPress();
