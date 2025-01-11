@@ -1,9 +1,9 @@
 import { KeyboardCharacter } from "../constants/characters";
-import { configStore } from "../stores/configStore";
 import { fontSize, gameStore } from "../stores/gameStore";
 import { Vector2 } from "../utils/Vector2";
 
 const punishTime = 500;
+const highlightTime = 500;
 
 export class FallingWord {
   word: string;
@@ -13,6 +13,7 @@ export class FallingWord {
   speed = 1 / 4;
   toRemove = false;
   punishedAt: Date | null = null;
+  highlightedAt: Date | null = null;
   typedColor: string;
   toTypeColor: string;
 
@@ -39,7 +40,7 @@ export class FallingWord {
 
     ctx.save();
     ctx.translate(this.position.x, this.position.y);
-    if (this.punishedAt) {
+    if (this.highlightedAt) {
       ctx.translate(wordWidth / 2, fontSize / 4);
       ctx.rotate((Math.random() - 0.5) * 0.5);
       ctx.translate(-wordWidth / 2, -fontSize / 4);
@@ -60,7 +61,7 @@ export class FallingWord {
     ctx.fillStyle = this.typedColor;
     ctx.fillText(this.typedText, 0, 0);
 
-    if (this.punishedAt) {
+    if (this.highlightedAt) {
       ctx.fillStyle = "#ff0000";
     } else {
       ctx.fillStyle = this.toTypeColor;
@@ -77,24 +78,29 @@ export class FallingWord {
     const estimatedTime = timePerCharacter * this.word.length;
     const timeRatio = deltaTime / estimatedTime;
 
-    let dx = Math.min(3, toTravel * timeRatio * this.speed);
+    let dy = Math.min(3, toTravel * timeRatio * this.speed);
     if (this.punishedAt) {
-      dx *= 2;
+      dy *= 2;
     }
-    this.position.y += dx;
+    this.position.y += dy;
 
     if (this.position.y > ctx.canvas.height + 40) {
       this.markToRemove();
-      gameStore.lowerDifficulty(true);
       gameStore.punishForMissedWord();
     }
     if (Number(new Date()) - Number(this.punishedAt) > punishTime) {
       this.punishedAt = null;
     }
+    if (Number(new Date()) - Number(this.highlightedAt) > highlightTime) {
+      this.highlightedAt = null;
+    }
   }
 
   handlePunishment() {
     this.punishedAt = new Date();
+  }
+  highlight() {
+    this.highlightedAt = new Date();
   }
 
   markToRemove() {
@@ -105,18 +111,10 @@ export class FallingWord {
     }
   }
 
-  calculateScore(completionSpeed: number) {
-    return (
-      Math.log(gameStore.currentSpeed * this.word.length * completionSpeed) *
-      configStore.unlockedCharacters.length
-    );
-  }
-
   handleCompletion() {
     this.markToRemove();
     const completionSpeed = 1 - this.position.y / window.innerHeight;
-    gameStore.addScore(this.calculateScore(completionSpeed));
-    gameStore.upDifficulty(completionSpeed > 0.5);
+    gameStore.rewardCompletion(completionSpeed, this.word.length);
   }
 
   handleKey(key: KeyboardCharacter) {

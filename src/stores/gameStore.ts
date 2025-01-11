@@ -49,12 +49,31 @@ class GameStore {
   }
 
   punishForInvalidButtonPress() {
+    if (this.focusedWord) {
+      this.focusedWord.highlight();
+    } else {
+      this.fallingWords.forEach((word) => word.highlight());
+    }
     this.fallingWords.forEach((word) => word.handlePunishment());
-    this.lowerDifficulty();
+    this.lowerDifficulty(1);
     this.score = Math.max(0, this.score - 10);
   }
   punishForMissedWord() {
+    gameStore.lowerDifficulty(2);
     this.score *= 0.9;
+  }
+
+  calculateScore(completionSpeed: number, wordLength: number) {
+    return (
+      Math.log(this.currentSpeed * wordLength * completionSpeed) *
+      configStore.unlockedCharacters.length
+    );
+  }
+  rewardCompletion(completionSpeed: number, wordLength: number) {
+    this.addScore(this.calculateScore(completionSpeed, wordLength));
+    this.upDifficulty(
+      Math.ceil(wordLength / 2) * (completionSpeed > 0.5 ? 2 : 1)
+    );
   }
 
   addScore(amount: number) {
@@ -68,11 +87,11 @@ class GameStore {
     this.focusedWord = undefined;
   }
 
-  lowerDifficulty(double = false) {
-    this.currentSpeed = Math.max(10, this.currentSpeed - (double ? 2 : 1));
+  lowerDifficulty(value: number) {
+    this.currentSpeed = Math.max(10, this.currentSpeed - value);
   }
-  upDifficulty(double = false) {
-    this.currentSpeed += double ? 2 : 1;
+  upDifficulty(value: number) {
+    this.currentSpeed += value;
     if (this.currentSpeed >= configStore.targetSpeed) {
       this.currentSpeed /= 2;
       configStore.unlockNextCharacter();
