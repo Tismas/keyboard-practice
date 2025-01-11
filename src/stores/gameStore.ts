@@ -75,7 +75,7 @@ class GameStore {
       statsStore.score + this.calculateScore(completionSpeed, wordLength)
     );
     this.upDifficulty(
-      Math.ceil(wordLength / 2) * (completionSpeed > 0.5 ? 2 : 1)
+      Math.ceil(wordLength / 2) * (completionSpeed > 0.5 ? 1 : 0)
     );
   }
 
