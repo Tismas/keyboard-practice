@@ -84,7 +84,7 @@ export class FallingWord {
     }
     this.position.y += dy;
 
-    if (this.position.y > ctx.canvas.height + 40) {
+    if (this.position.y > ctx.canvas.height + fontSize) {
       this.markToRemove();
       gameStore.punishForMissedWord();
     }

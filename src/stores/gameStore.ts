@@ -66,7 +66,7 @@ class GameStore {
 
   calculateScore(completionSpeed: number, wordLength: number) {
     return (
-      Math.log(this.currentSpeed * wordLength * completionSpeed) *
+      (Math.log(this.currentSpeed * wordLength * completionSpeed) || 0) *
       configStore.unlockedCharacters.length
     );
   }
