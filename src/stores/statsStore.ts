@@ -1,10 +1,9 @@
-import { create } from "zustand";
-import { KeyboardCharacter } from "../constants/characters";
+import { makeAutoObservable } from "mobx";
 
-interface StatsState {
-  performance: Partial<Record<KeyboardCharacter, number>>;
+class StatsStore {
+  constructor() {
+    makeAutoObservable(this, {}, { autoBind: true });
+  }
 }
 
-export const useStatsStore = create<StatsState>(() => ({
-  performance: {},
-}));
+export const statsStore = new StatsStore();

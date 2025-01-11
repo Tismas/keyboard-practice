@@ -1,43 +1,44 @@
-import { create } from "zustand";
-import { KeyboardCharacter, lowerCaseLetters } from "../constants/characters";
-import { words } from "./words";
+import { makeAutoObservable } from "mobx";
+import { KeyboardCharacter } from "../constants/characters";
+import { words } from "../constants/words";
 
-interface ConfigState {
-  targetSpeed: number;
-  setTargetSpeed: (targetSpeed: number) => void;
-  unlockedCharacters: KeyboardCharacter[];
+class ConfigStore {
+  targetSpeed = 30;
+  unlockedCharacters: KeyboardCharacter[] = ["f", "j"];
   wordsPool: string[];
-  toggleUnlocked: (character: KeyboardCharacter) => void;
+
+  constructor() {
+    makeAutoObservable(this, {}, { autoBind: true });
+
+    this.wordsPool = this.getWordsPool();
+  }
+
+  toggleUnlocked(character: KeyboardCharacter) {
+    if (this.unlockedCharacters.includes(character)) {
+      this.unlockedCharacters.splice(
+        this.unlockedCharacters.indexOf(character),
+        1
+      );
+    } else {
+      this.unlockedCharacters.push(character);
+    }
+    this.wordsPool = this.getWordsPool();
+  }
+
+  setTargetSpeed(targetSpeed: number) {
+    this.targetSpeed = targetSpeed;
+  }
+
+  private getWordsPool(): string[] {
+    console.log("Calculating words pool...");
+    return words.filter((word) =>
+      word
+        .split("")
+        .every((letter) =>
+          this.unlockedCharacters.includes(letter as KeyboardCharacter)
+        )
+    );
+  }
 }
 
-const getWordsPool = (unlockedCharacters: string[]): string[] => {
-  console.log("Calculating words pool...");
-  return words.filter((word) =>
-    word.split("").every((letter) => unlockedCharacters.includes(letter))
-  );
-};
-
-const initialUnlockedCharacters: KeyboardCharacter[] = [...lowerCaseLetters];
-
-export const useConfigStore = create<ConfigState>((set, get) => ({
-  targetSpeed: 180,
-  setTargetSpeed: (targetSpeed) => set({ targetSpeed }),
-  unlockedCharacters: initialUnlockedCharacters,
-  wordsPool: getWordsPool(initialUnlockedCharacters),
-
-  toggleUnlocked: (character) => {
-    const state = get();
-    const unlockedCharacters = [...state.unlockedCharacters];
-
-    if (unlockedCharacters.includes(character)) {
-      unlockedCharacters.splice(unlockedCharacters.indexOf(character), 1);
-    } else {
-      unlockedCharacters.push(character);
-    }
-
-    set({
-      unlockedCharacters,
-      wordsPool: getWordsPool(unlockedCharacters),
-    });
-  },
-}));
+export const configStore = new ConfigStore();

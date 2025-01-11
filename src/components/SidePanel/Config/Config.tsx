@@ -1,3 +1,4 @@
+import { observer } from "mobx-react";
 import {
   lowerCaseLetters,
   numbers,
@@ -5,13 +6,12 @@ import {
   upperCaseLetters,
   whiteSpace,
 } from "../../../constants/characters";
-import { useConfigStore } from "../../../stores/configStore";
+import { configStore } from "../../../stores/configStore";
 import { Slider } from "../../ui/Slider";
 import { Character } from "./Character";
 
-export const Config = () => {
-  const targetSpeed = useConfigStore((state) => state.targetSpeed);
-  const setTargetSpeed = useConfigStore((state) => state.setTargetSpeed);
+export const Config = observer(() => {
+  const { targetSpeed, setTargetSpeed } = configStore;
 
   return (
     <>
@@ -57,4 +57,4 @@ export const Config = () => {
       </div>
     </>
   );
-};
+});
