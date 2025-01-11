@@ -19,7 +19,7 @@ export const Config = observer(() => {
       <Slider
         className="mb-6"
         label="Target speed"
-        min={1}
+        min={20}
         max={1000}
         value={targetSpeed}
         valueLabel={
