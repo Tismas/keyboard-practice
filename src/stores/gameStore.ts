@@ -56,7 +56,11 @@ class GameStore {
     }
     this.fallingWords.forEach((word) => word.handlePunishment());
     this.lowerDifficulty(1);
+
     statsStore.setScore(statsStore.score - 10);
+    statsStore.handleIncorrectlyTyped(
+      this.focusedWord?.textToType[0] || this.getLowestWord().textToType[0]
+    );
   }
   punishForMissedWord() {
     statsStore.setStreakWithoutMistake(0);
@@ -92,6 +96,10 @@ class GameStore {
       this.currentSpeed /= 2;
       configStore.unlockNextCharacter();
     }
+  }
+
+  private getLowestWord() {
+    return this.fallingWords.toSorted((a, b) => b.position.y - a.position.y)[0];
   }
 
   private initializeEvents() {

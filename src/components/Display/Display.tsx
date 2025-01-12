@@ -23,7 +23,7 @@ export const Display = observer(() => {
         <canvas ref={canvasRef}></canvas>
       ) : (
         <button
-          className="bg-surfaceLighter p-4 rounded-lg hover:bg-background"
+          className="bg-surface-lighter p-4 rounded-lg hover:bg-background"
           onClick={handleGameStart}
         >
           Start game

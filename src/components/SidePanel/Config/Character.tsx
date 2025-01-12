@@ -33,7 +33,7 @@ export const Character = observer(({ character }: Props) => {
       className={`w-8 h-8 text-lg flex justify-center items-center rounded-md ${
         unlockedCharacters.includes(character)
           ? "bg-positive"
-          : "bg-surfaceLighter opacity-50"
+          : "bg-surface-lighter opacity-50"
       }`}
       onClick={() => toggleUnlocked(character)}
     >

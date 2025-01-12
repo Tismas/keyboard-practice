@@ -8,6 +8,7 @@
   --surface-lighter: #0f172a11;
   --positive: #84cc16;
   --foreground: #020617;
+  --foreground-lighter: #091341;
 
   @media (prefers-color-scheme: dark) {
     --background: #020617;
@@ -15,5 +16,6 @@
     --surface-lighter: #f1f5f911;
     --positive: #14532d;
     --foreground: #f8fafc;
+    --foreground-lighter: #c0c0c0;
   }
 }

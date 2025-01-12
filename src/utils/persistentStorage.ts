@@ -2,7 +2,8 @@ type Key =
   | "unlockedCharacters"
   | "targetSpeed"
   | "topScore"
-  | "longestStreakWithoutMistake";
+  | "longestStreakWithoutMistake"
+  | "characterPerformance";
 
 export const getSavedState = <T>(key: Key, fallback: T): T => {
   try {

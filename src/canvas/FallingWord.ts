@@ -1,5 +1,6 @@
 import { KeyboardCharacter } from "../constants/characters";
 import { fontSize, gameStore } from "../stores/gameStore";
+import { statsStore } from "../stores/statsStore";
 import { Vector2 } from "../utils/Vector2";
 
 const punishTime = 500;
@@ -124,6 +125,7 @@ export class FallingWord {
       if (this.textToType.length === 0) {
         this.handleCompletion();
       }
+      statsStore.handleCorrectlyTyped(key);
     } else {
       gameStore.punishForInvalidButtonPress();
     }
